@@ -1,0 +1,147 @@
+---
+/**
+ * Plantilla de la imagen para compartir en redes (Open Graph).
+ * Se captura a 1200 × 630 y se guarda en /public/og.png:
+ *   npm run build && npx astro preview  →  captura de http://localhost:4321/og
+ * Mantenerla como página permite regenerar la imagen si cambia la marca.
+ */
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/figtree';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/global.scss';
+import Logo from '../components/ui/Logo.astro';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Imagen para compartir · Nítida</title>
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body class="og-body">
+    <div class="og on-dark">
+      <div class="og__brand">
+        <Logo withTagline />
+      </div>
+      <p class="og__title">
+        Tu factura esconde <span>euros de más</span>.<br />
+        Nosotros los encontramos.
+      </p>
+      <p class="og__text">
+        Revisión gratuita de tus facturas de luz y gas para hogares, autónomos, empresas y
+        comunidades.
+      </p>
+      <div class="og__foot">
+        <span class="og__pill">Sin coste</span>
+        <span class="og__pill">Sin permanencia</span>
+        <span class="og__pill">Respuesta en 24 h</span>
+      </div>
+      <div class="og__stamp">
+        <strong>−360 €</strong>
+        <span>al año*</span>
+      </div>
+    </div>
+
+    <style lang="scss">
+      .og-body {
+        margin: 0;
+      }
+
+      .og {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 1200px;
+        height: 630px;
+        padding: 4rem;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: -14rem;
+          right: -10rem;
+          width: 36rem;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          background: radial-gradient(closest-side, rgb(255 210 63 / 0.22), transparent);
+        }
+      }
+
+      .og__brand {
+        position: absolute;
+        top: 4rem;
+        left: 4rem;
+      }
+
+      .og__title {
+        max-width: 22ch;
+        font-family: var(--f-display);
+        font-size: 4.25rem;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1.02;
+
+        span {
+          color: var(--c-volt);
+        }
+      }
+
+      .og__text {
+        max-width: 46ch;
+        margin-top: 1.5rem;
+        color: var(--c-on-dark-muted);
+        font-size: 1.5rem;
+        line-height: 1.4;
+      }
+
+      .og__foot {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 2.5rem;
+      }
+
+      .og__pill {
+        padding: 0.6rem 1.25rem;
+        border: 1px solid rgb(246 242 233 / 0.25);
+        border-radius: 999px;
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+
+      .og__stamp {
+        position: absolute;
+        top: 50%;
+        right: 5rem;
+        display: grid;
+        place-content: center;
+        width: 12rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--c-leaf);
+        color: #fff;
+        text-align: center;
+        rotate: 12deg;
+        translate: 0 -50%;
+        outline: 2px dashed rgb(255 255 255 / 0.5);
+        outline-offset: -12px;
+
+        strong {
+          display: block;
+          font-family: var(--f-display);
+          font-size: 2.75rem;
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          line-height: 1;
+        }
+
+        span {
+          font-size: 1rem;
+          font-weight: 600;
+        }
+      }
+    </style>
+  </body>
+</html>

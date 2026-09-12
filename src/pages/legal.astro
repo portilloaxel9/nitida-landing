@@ -1,0 +1,105 @@
+---
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { legalSections } from '../data/legal';
+---
+
+<BaseLayout
+  title="Información legal · Nítida"
+  description="Aviso legal, política de privacidad y política de cookies de Nítida Asesoría Energética (textos simulados)."
+  noindex
+>
+  <Header />
+
+  <main id="main" class="legal section">
+    <div class="container legal__inner">
+      <p class="kicker">Información legal</p>
+      <h1 class="legal__title">Aviso legal, privacidad y cookies</h1>
+      <p class="legal__notice">
+        Esta web es un proyecto ficticio creado como prueba técnica. Los datos de empresa y los
+        textos legales son simulados y no constituyen asesoramiento jurídico.
+      </p>
+
+      <nav class="legal__index" aria-label="Secciones legales">
+        <ul role="list">
+          {legalSections.map((section) => (
+            <li>
+              <a href={`#${section.id}`}>{section.title}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      {legalSections.map((section) => (
+        <section class="legal__section" id={section.id}>
+          <h2>{section.title}</h2>
+          {section.body.map((paragraph) => (
+            <p set:html={paragraph} />
+          ))}
+        </section>
+      ))}
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style lang="scss">
+  .legal__inner {
+    max-width: 46rem;
+  }
+
+  .legal__title {
+    font-size: var(--fs-h2);
+  }
+
+  .legal__notice {
+    margin-top: 1.25rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--c-volt-soft);
+    font-size: var(--fs-sm);
+  }
+
+  .legal__index {
+    margin-top: 2rem;
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    a {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      background: var(--c-surface);
+      box-shadow: inset 0 0 0 1px var(--c-line);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        background: var(--c-volt);
+      }
+    }
+  }
+
+  .legal__section {
+    margin-top: 3rem;
+    scroll-margin-top: calc(var(--header-h) + 2rem);
+
+    h2 {
+      margin-bottom: 1rem;
+      font-size: var(--fs-h3);
+    }
+
+    p {
+      margin-bottom: 0.875rem;
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+    }
+  }
+</style>
