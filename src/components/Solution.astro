@@ -1,0 +1,143 @@
+---
+import Check from '@lucide/astro/icons/check';
+import Scale from '@lucide/astro/icons/scale';
+import UsageChart from './UsageChart.astro';
+import { checks } from '../data/content';
+---
+
+<section class="solution section on-dark" id="solucion" aria-labelledby="solution-title">
+  <div class="container solution__grid">
+    <div class="solution__copy">
+      <p class="kicker">La solución</p>
+      <h2 class="section-title" id="solution-title">
+        Una revisión energética a fondo, con <span class="solution__accent">tus datos reales</span>.
+      </h2>
+      <p class="lead">
+        No trabajamos con estimaciones. Analizamos tus facturas y tu curva de consumo —los datos
+        hora a hora que registra tu contador digital— para detectar dónde se escapa el dinero y qué
+        puedes mejorar.
+      </p>
+
+      <h3 class="solution__subtitle">Qué revisamos</h3>
+      <ul class="checks" role="list">
+        {checks.map((item) => (
+          <li>
+            <span class="checks__icon">
+              <Check size={14} stroke-width={3.5} />
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+
+      <p class="solution__note">
+        <Scale size={22} />
+        <span>
+          <strong>Somos independientes: no vendemos energía.</strong> Si lo mejor para ti es
+          quedarte con tu compañía actual, te lo diremos.
+        </span>
+      </p>
+    </div>
+
+    <div class="solution__visual" data-reveal>
+      <UsageChart />
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/mixins' as *;
+
+  .solution {
+    position: relative;
+    overflow: clip;
+
+    /* Resplandor amarillo muy sutil en la esquina */
+    &::before {
+      content: '';
+      position: absolute;
+      top: -20rem;
+      right: -16rem;
+      width: 44rem;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgb(255 210 63 / 0.14), transparent);
+      pointer-events: none;
+    }
+  }
+
+  .solution__grid {
+    position: relative;
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 4.5rem);
+    align-items: center;
+
+    @include mq(lg) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .solution__accent {
+    color: var(--c-volt);
+  }
+
+  .solution__subtitle {
+    margin-top: 2.5rem;
+    color: var(--c-on-dark-muted);
+    font-family: var(--f-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .checks {
+    display: grid;
+    gap: 0.875rem 1.5rem;
+    margin-top: 1.125rem;
+
+    @include mq(sm) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: var(--fs-sm);
+      line-height: 1.45;
+    }
+  }
+
+  .checks__icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.375rem;
+    height: 1.375rem;
+    margin-top: 0.05rem;
+    border-radius: 50%;
+    background: var(--c-volt);
+    color: var(--c-ink);
+  }
+
+  .solution__note {
+    display: flex;
+    gap: 0.875rem;
+    margin-top: 2.25rem;
+    padding: 1.125rem 1.25rem;
+    border: 1px solid rgb(246 242 233 / 0.16);
+    border-radius: var(--radius);
+    background: rgb(246 242 233 / 0.05);
+    font-size: var(--fs-sm);
+
+    :global(svg) {
+      flex: none;
+      color: var(--c-volt);
+    }
+
+    strong {
+      color: #fff;
+    }
+  }
+</style>

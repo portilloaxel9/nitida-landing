@@ -1,0 +1,173 @@
+---
+import { jargon, pains } from '../data/content';
+
+// Inclinaciones "aleatorias" pero estables entre builds para la nube de términos
+const tilt = (i: number) => (((i * 37) % 11) - 5) * 0.8;
+const coral = new Set([1, 6, 10]);
+const dark = new Set([3, 8]);
+---
+
+<section class="problem section" id="problema" aria-labelledby="problem-title">
+  <div class="container">
+    <div class="problem__intro">
+      <div>
+        <p class="kicker">El problema</p>
+        <h2 class="section-title" id="problem-title">
+          La factura de la luz parece escrita para que no la entiendas.
+        </h2>
+        <p class="lead">
+          Y lo que no se entiende, no se revisa. Por eso muchos hogares y negocios pagan de más cada
+          mes sin saberlo.
+        </p>
+      </div>
+
+      <div class="jargon" aria-hidden="true">
+        {jargon.map((term, i) => (
+          <span
+            class:list={['jargon__chip', { 'is-coral': coral.has(i), 'is-dark': dark.has(i) }]}
+            style={`--tilt: ${tilt(i)}deg`}
+          >
+            {term}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <ul class="pains" role="list">
+      {pains.map(({ icon: Icon, quote, text }, i) => (
+        <li class="pain" data-reveal style={`--reveal-i: ${i}`}>
+          <span class="pain__icon">
+            <Icon size={22} />
+          </span>
+          <p class="pain__quote">«{quote}»</p>
+          <p class="pain__text">{text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/mixins' as *;
+
+  .problem__intro {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+    margin-bottom: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+
+    @include mq(lg) {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4rem;
+    }
+  }
+
+  /* Nube de tecnicismos: transmite el "no entiendo nada" de un vistazo */
+  .jargon {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.625rem 0.5rem;
+    padding: 1.5rem 0.5rem;
+
+    /* Halo de marca detrás de los términos */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: -1;
+      width: min(100%, 24rem);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgb(255 210 63 / 0.55), rgb(255 210 63 / 0));
+      translate: -50% -50%;
+    }
+  }
+
+  .jargon__chip {
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--c-ink);
+    border-radius: 0.5rem;
+    background: var(--c-surface);
+    font-family: var(--f-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    rotate: var(--tilt);
+    box-shadow: 2px 2px 0 var(--c-ink);
+
+    &.is-coral {
+      border-color: var(--c-coral-text);
+      background: var(--c-coral-soft);
+      color: var(--c-coral-text);
+      box-shadow: 2px 2px 0 var(--c-coral-text);
+    }
+
+    &.is-dark {
+      background: var(--c-ink);
+      color: var(--c-paper);
+    }
+
+    @include mq-down(md) {
+      &:nth-child(n + 9) {
+        display: none;
+      }
+    }
+
+    @include mq(md) {
+      font-size: 0.8125rem;
+    }
+  }
+
+  .pains {
+    display: grid;
+    gap: 1rem;
+
+    @include mq(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mq(xl) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .pain {
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    box-shadow:
+      inset 0 0 0 1px var(--c-line),
+      var(--shadow-card);
+  }
+
+  .pain__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 1.25rem;
+    border-radius: 50%;
+    background: var(--c-coral-soft);
+    color: var(--c-coral-text);
+  }
+
+  .pain__quote {
+    font-family: var(--f-display);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  .pain__text {
+    margin-top: 0.75rem;
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+  }
+</style>

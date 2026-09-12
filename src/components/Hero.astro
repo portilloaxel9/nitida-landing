@@ -1,0 +1,284 @@
+---
+import Check from '@lucide/astro/icons/check';
+import BillMockup from './BillMockup.astro';
+import Button from './ui/Button.astro';
+import { stats } from '../data/content';
+---
+
+<section class="hero" id="inicio" aria-labelledby="hero-title">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">
+        <span class="hero__pulse" aria-hidden="true"></span>
+        Asesoría energética para hogares y empresas
+      </p>
+
+      <h1 class="hero__title" id="hero-title">
+        Tu factura esconde <mark class="hl">euros de más</mark>. Nosotros los encontramos.
+      </h1>
+
+      <p class="hero__lead">
+        Revisamos gratis tus facturas de luz y gas y tu consumo real para que pagues solo por la
+        energía que necesitas. Sin compromiso y sin cambiar nada hasta que tú lo decidas.
+      </p>
+
+      <div class="hero__actions">
+        <Button href="#contacto" size="lg" arrow>
+          Quiero mi revisión gratuita
+        </Button>
+        <a class="hero__secondary" href="#como-funciona">
+          Ver cómo funciona
+        </a>
+      </div>
+
+      <ul class="hero__trust" role="list">
+        <li>
+          <Check size={18} stroke-width={3} />
+          Sin coste
+        </li>
+        <li>
+          <Check size={18} stroke-width={3} />
+          Sin permanencia
+        </li>
+        <li>
+          <Check size={18} stroke-width={3} />
+          Respuesta en 24 h
+        </li>
+      </ul>
+    </div>
+
+    <div class="hero__visual">
+      <BillMockup />
+    </div>
+  </div>
+
+  <div class="container">
+    <dl class="stats">
+      {stats.map((stat) => (
+        <div class="stats__item">
+          <dt>{stat.label}</dt>
+          <dd>{stat.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/mixins' as *;
+
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
+    padding-block: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(3rem, 2rem + 3vw, 4.5rem);
+
+    /* Cuadrícula de "papel milimetrado" que se desvanece: guiño a la factura */
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(to right, rgb(14 35 32 / 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgb(14 35 32 / 0.05) 1px, transparent 1px);
+      background-size: 3rem 3rem;
+      mask-image: radial-gradient(ellipse 80% 70% at 70% 30%, #000 20%, transparent 75%);
+    }
+  }
+
+  .hero__grid {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 4rem);
+    align-items: center;
+
+    @include mq(lg) {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem;
+    }
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    padding: 0.4rem 0.9rem 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: var(--c-surface);
+    box-shadow: inset 0 0 0 1px var(--c-line);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+
+  .hero__pulse {
+    position: relative;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--c-leaf);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: inherit;
+    }
+
+    @include motion {
+      &::after {
+        animation: pulse 2s ease-out infinite;
+      }
+    }
+  }
+
+  .hero__title {
+    max-width: 16ch;
+    font-size: var(--fs-h1);
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .hero__lead {
+    max-width: 50ch;
+    margin-top: 1.5rem;
+    color: var(--c-muted);
+    font-size: var(--fs-lg);
+    line-height: 1.55;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+    margin-top: 2.25rem;
+
+    > :global(.btn) {
+      @include mq-down(sm) {
+        width: 100%;
+      }
+    }
+  }
+
+  .hero__secondary {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--c-volt-2);
+    text-decoration-thickness: 2px;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+
+    @include mq-down(sm) {
+      margin-inline: auto;
+    }
+  }
+
+  .hero__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1.75rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    :global(svg) {
+      color: var(--c-leaf);
+    }
+
+    @include mq-down(sm) {
+      justify-content: center;
+    }
+  }
+
+  .hero__visual {
+    @include mq(lg) {
+      padding-right: 1rem;
+    }
+  }
+
+  /* Franja de datos clave */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: clamp(3.5rem, 2rem + 5vw, 5.5rem);
+    border-top: 1px solid var(--c-line-strong);
+
+    @include mq(md) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .stats__item {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    padding: 1.5rem 1rem 0 0;
+
+    @include mq-down(md) {
+      &:nth-child(n + 3) {
+        padding-top: 1.25rem;
+      }
+    }
+
+    @include mq(md) {
+      padding-inline: 1.5rem;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      & + & {
+        border-left: 1px solid var(--c-line);
+      }
+    }
+
+    dd {
+      font-family: var(--f-display);
+      font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    dt {
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+      line-height: 1.35;
+    }
+  }
+
+  /* Entrada del texto del hero, escalonada */
+  @include motion {
+    .hero__copy > * {
+      animation: rise 0.8s var(--ease-out) both;
+    }
+
+    @for $i from 2 through 5 {
+      .hero__copy > :nth-child(#{$i}) {
+        animation-delay: #{($i - 1) * 0.08}s;
+      }
+    }
+
+    .hero__title :global(.hl) {
+      animation: marker 0.7s var(--ease-out) 0.6s both;
+    }
+  }
+
+  @keyframes pulse {
+    to {
+      opacity: 0;
+      scale: 2.6;
+    }
+  }
+</style>
