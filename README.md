@@ -9,10 +9,10 @@ maquetadores visuales.
 
 ## Enlaces
 
-|                   |                                                               |
-| ----------------- | ------------------------------------------------------------- |
-| **Web publicada** | _pendiente de desplegar (ver [9. Despliegue](#9-despliegue))_ |
-| **Repositorio**   | https://github.com/portilloaxel9/nitida-landing               |
+|                   |                                                 |
+| ----------------- | ----------------------------------------------- |
+| **Web publicada** | https://portilloaxel9.github.io/nitida-landing/ |
+| **Repositorio**   | https://github.com/portilloaxel9/nitida-landing |
 
 ---
 
@@ -77,7 +77,9 @@ src/
 │  └─ og.astro         Plantilla 1200×630 de la que sale /public/og.png
 ├─ scripts/            TypeScript del cliente (formulario y animación al hacer scroll)
 ├─ styles/             global.scss (tokens + base) y _mixins.scss (breakpoints)
-└─ utils/format.ts     Formato de euros y decimales en es-ES
+└─ utils/
+   ├─ format.ts        Formato de euros y decimales en es-ES
+   └─ url.ts           withBase(): enlaces válidos en la raíz o en un subdirectorio
 ```
 
 **Todo el contenido está en `src/data/`**: cambiar un beneficio, una pregunta frecuente o el nombre
@@ -164,11 +166,19 @@ de datos junto al botón.
 
 ## 9. Despliegue
 
-El proyecto es 100 % estático (`dist/`), así que funciona en cualquier hosting:
+El proyecto es 100 % estático: el build genera solo HTML, CSS, tipografías y unos 3,6 kB de
+JavaScript incrustado en el propio HTML (ni un archivo `.js` suelto). No necesita servidor.
 
-- **Vercel / Netlify**: importar el repositorio; ambos detectan Astro (`npm run build` → `dist`).
-- La URL pública se toma automáticamente de la plataforma para el `canonical` y las etiquetas Open
-  Graph; también se puede fijar con la variable de entorno `SITE_URL`.
+- **GitHub Pages** (el que está en marcha): cada `push` a `main` dispara
+  [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), que construye con la acción
+  oficial de Astro y publica. Como Pages sirve el proyecto en un subdirectorio, el workflow pasa
+  `BASE_PATH=/nitida-landing` y `SITE_URL`.
+- **Vercel / Netlify**: importar el repositorio y listo; ambos detectan Astro (`npm run build` →
+  `dist`) y ahí no hace falta `BASE_PATH` porque la web vive en la raíz.
+
+Los enlaces internos pasan por el ayudante `withBase()` (`src/utils/url.ts`), así que la misma base
+de código funciona igual en la raíz o en un subdirectorio. La URL pública se toma de la plataforma
+para el `canonical` y Open Graph, o se fija con `SITE_URL`.
 
 ## 10. Uso de IA
 

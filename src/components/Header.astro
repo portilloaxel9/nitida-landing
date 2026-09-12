@@ -3,11 +3,12 @@ import Phone from '@lucide/astro/icons/phone';
 import Button from './ui/Button.astro';
 import Logo from './ui/Logo.astro';
 import { nav, site } from '../data/site';
+import { withBase } from '../utils/url';
 ---
 
 <header class="header" data-header>
   <div class="container header__inner">
-    <a class="header__brand" href="/" aria-label={`${site.name}, ir al inicio`}>
+    <a class="header__brand" href={withBase('/')} aria-label={`${site.name}, ir al inicio`}>
       <Logo />
     </a>
 
@@ -15,7 +16,7 @@ import { nav, site } from '../data/site';
       <ul role="list">
         {nav.map((item) => (
           <li>
-            <a href={item.href}>{item.label}</a>
+            <a href={withBase(item.href)}>{item.label}</a>
           </li>
         ))}
       </ul>
@@ -26,7 +27,7 @@ import { nav, site } from '../data/site';
         <Phone size={18} />
         <span class="header__phone-number">{site.phone}</span>
       </a>
-      <Button href="/#contacto" size="sm">
+      <Button href={withBase('/#contacto')} size="sm">
         Consulta gratis
       </Button>
     </div>

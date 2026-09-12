@@ -9,6 +9,7 @@ import '../styles/global.scss';
 import displayFont from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
 import bodyFont from '@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2?url';
 import { site } from '../data/site';
+import { withBase } from '../utils/url';
 
 interface Props {
   title: string;
@@ -19,14 +20,15 @@ interface Props {
 const { title, description = site.description, noindex = false } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL('/og.png', Astro.site);
+const ogImage = new URL(withBase('/og.png'), Astro.site);
+const homeUrl = new URL(withBase('/'), Astro.site);
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   name: site.legalName,
   description: site.description,
-  url: Astro.site?.href,
+  url: homeUrl.href,
   telephone: '+34900000000',
   email: site.email,
   priceRange: 'Gratis',
@@ -51,7 +53,7 @@ const jsonLd = {
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <meta name="theme-color" content="#f6f2e9" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
 
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />

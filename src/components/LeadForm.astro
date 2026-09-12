@@ -8,9 +8,12 @@ import Store from '@lucide/astro/icons/store';
 import Users from '@lucide/astro/icons/users';
 import Button from './ui/Button.astro';
 import { site } from '../data/site';
+import { withBase } from '../utils/url';
+
+const privacyUrl = withBase('/legal#privacidad');
 
 // Información básica de protección de datos (primera capa), junto al botón de envío
-const privacyNotice = `<strong>Responsable:</strong> ${site.legalName} <strong>Finalidad:</strong> atender tu solicitud y contactarte sobre tu consulta. <strong>Legitimación:</strong> tu consentimiento. <strong>Derechos:</strong> acceso, rectificación, supresión y otros, como se explica en la <a href="/legal#privacidad">política de privacidad</a>.`;
+const privacyNotice = `<strong>Responsable:</strong> ${site.legalName} <strong>Finalidad:</strong> atender tu solicitud y contactarte sobre tu consulta. <strong>Legitimación:</strong> tu consentimiento. <strong>Derechos:</strong> acceso, rectificación, supresión y otros, como se explica en la <a href="${privacyUrl}">política de privacidad</a>.`;
 
 const clientTypes = [
   { value: 'particular', label: 'Particular', icon: House },
@@ -112,7 +115,7 @@ const clientTypes = [
       />
       <label for="lead-privacy">
         He leído y acepto la{' '}
-        <a href="/legal#privacidad" target="_blank">
+        <a href={privacyUrl} target="_blank">
           política de privacidad
         </a>
         .
