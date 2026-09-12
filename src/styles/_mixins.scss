@@ -1,0 +1,31 @@
+@use 'sass:map';
+
+// Breakpoints mobile-first. En em para que respeten el zoom del navegador.
+$breakpoints: (
+  sm: 36em,
+  //  576px · móvil grande
+  md: 48em,
+  //  768px · tablet
+  lg: 64em,
+  // 1024px · escritorio
+  xl: 80em, // 1280px · escritorio amplio
+);
+
+@mixin mq($bp) {
+  @media (min-width: map.get($breakpoints, $bp)) {
+    @content;
+  }
+}
+
+@mixin mq-down($bp) {
+  @media (max-width: (map.get($breakpoints, $bp) - 0.01em)) {
+    @content;
+  }
+}
+
+// Animaciones solo para quien no ha pedido reducir el movimiento
+@mixin motion {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
