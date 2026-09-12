@@ -9,10 +9,10 @@ maquetadores visuales.
 
 ## Enlaces
 
-|                   |                                                          |
-| ----------------- | -------------------------------------------------------- |
-| **Web publicada** | _pendiente de desplegar (ver [Despliegue](#despliegue))_ |
-| **Repositorio**   | _este mismo_                                             |
+|                   |                                                               |
+| ----------------- | ------------------------------------------------------------- |
+| **Web publicada** | _pendiente de desplegar (ver [9. Despliegue](#9-despliegue))_ |
+| **Repositorio**   | https://github.com/portilloaxel9/nitida-landing               |
 
 ---
 
