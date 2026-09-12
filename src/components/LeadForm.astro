@@ -1,0 +1,483 @@
+---
+import Briefcase from '@lucide/astro/icons/briefcase';
+import CircleCheck from '@lucide/astro/icons/circle-check';
+import FileText from '@lucide/astro/icons/file-text';
+import House from '@lucide/astro/icons/house';
+import Lock from '@lucide/astro/icons/lock';
+import Store from '@lucide/astro/icons/store';
+import Users from '@lucide/astro/icons/users';
+import Button from './ui/Button.astro';
+import { site } from '../data/site';
+
+// Información básica de protección de datos (primera capa), junto al botón de envío
+const privacyNotice = `<strong>Responsable:</strong> ${site.legalName} <strong>Finalidad:</strong> atender tu solicitud y contactarte sobre tu consulta. <strong>Legitimación:</strong> tu consentimiento. <strong>Derechos:</strong> acceso, rectificación, supresión y otros, como se explica en la <a href="/legal#privacidad">política de privacidad</a>.`;
+
+const clientTypes = [
+  { value: 'particular', label: 'Particular', icon: House },
+  { value: 'autonomo', label: 'Autónomo', icon: Briefcase },
+  { value: 'empresa', label: 'Empresa', icon: Store },
+  { value: 'comunidad', label: 'Comunidad de propietarios', icon: Users },
+];
+---
+
+<div class="lead-form">
+  <form class="form" method="post" data-lead-form>
+    <div class="form__head">
+      <h3 class="form__title">Solicita tu consulta gratuita</h3>
+      <p class="form__hint">Te llevará menos de un minuto.</p>
+    </div>
+
+    <div class="field" data-field="name">
+      <label for="lead-name">Nombre y apellidos</label>
+      <input
+        id="lead-name"
+        name="name"
+        type="text"
+        autocomplete="name"
+        placeholder="Ej.: Laura García"
+        required
+        minlength="2"
+        aria-describedby="lead-name-error"
+      />
+      <p class="field__error" id="lead-name-error" data-error-for="name"></p>
+    </div>
+
+    <div class="form__row">
+      <div class="field" data-field="phone">
+        <label for="lead-phone">Teléfono</label>
+        <input
+          id="lead-phone"
+          name="phone"
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel"
+          placeholder="612 345 678"
+          required
+          aria-describedby="lead-phone-error"
+        />
+        <p class="field__error" id="lead-phone-error" data-error-for="phone"></p>
+      </div>
+
+      <div class="field" data-field="email">
+        <label for="lead-email">Email</label>
+        <input
+          id="lead-email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="nombre@correo.es"
+          required
+          aria-describedby="lead-email-error"
+        />
+        <p class="field__error" id="lead-email-error" data-error-for="email"></p>
+      </div>
+    </div>
+
+    <fieldset class="field" data-field="clientType" aria-describedby="lead-type-error">
+      <legend>Tipo de cliente</legend>
+      <div class="choices">
+        {clientTypes.map(({ value, label, icon: Icon }) => (
+          <label class="choice">
+            <input type="radio" name="clientType" value={value} required />
+            <span class="choice__box">
+              <Icon size={18} />
+              {label}
+            </span>
+          </label>
+        ))}
+      </div>
+      <p class="field__error" id="lead-type-error" data-error-for="clientType"></p>
+    </fieldset>
+
+    <div class="field" data-field="message">
+      <label for="lead-message">
+        Mensaje <span class="field__optional">(opcional)</span>
+      </label>
+      <textarea
+        id="lead-message"
+        name="message"
+        rows="3"
+        maxlength="1000"
+        placeholder="Ej.: pago unos 90 € al mes de luz y quiero revisar también el gas."
+      ></textarea>
+    </div>
+
+    <div class="field field--check" data-field="privacy">
+      <input
+        id="lead-privacy"
+        name="privacy"
+        type="checkbox"
+        required
+        aria-describedby="lead-privacy-error"
+      />
+      <label for="lead-privacy">
+        He leído y acepto la{' '}
+        <a href="/legal#privacidad" target="_blank">
+          política de privacidad
+        </a>
+        .
+      </label>
+      <p class="field__error" id="lead-privacy-error" data-error-for="privacy"></p>
+    </div>
+
+    <!-- Campo trampa para bots: invisible para personas y lectores de pantalla -->
+    <div class="form__hp" aria-hidden="true">
+      <label for="lead-website">No rellenes este campo</label>
+      <input id="lead-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <Button type="submit" size="lg" block arrow data-submit>
+      Solicitar mi consulta gratuita
+    </Button>
+
+    <p class="form__status" role="status" aria-live="polite" data-form-status></p>
+
+    <p class="form__reassure">
+      <Lock size={14} stroke-width={2.5} />
+      Sin coste y sin compromiso. No compartimos tus datos con nadie.
+    </p>
+
+    <p class="form__legal" set:html={privacyNotice} />
+  </form>
+
+  <div class="success" tabindex="-1" hidden data-form-success aria-labelledby="success-title">
+    <span class="success__icon">
+      <CircleCheck size={34} />
+    </span>
+    <h3 class="success__title" id="success-title">
+      ¡Solicitud recibida!
+    </h3>
+    <p class="success__text" data-success-text>
+      Te llamaremos en menos de 24 horas laborables para empezar tu revisión.
+    </p>
+    <p class="success__tip">
+      <FileText size={20} />
+      <span>
+        Mientras tanto, ten a mano tu última factura de luz o gas: es todo lo que necesitamos.
+      </span>
+    </p>
+    <button type="button" class="success__reset" data-form-reset>
+      Enviar otra solicitud
+    </button>
+  </div>
+</div>
+
+<script>
+  import { initLeadForm } from '../scripts/lead-form';
+
+  document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach(initLeadForm);
+</script>
+
+<style lang="scss">
+  @use '../styles/mixins' as *;
+
+  .lead-form {
+    --focus: var(--c-ink);
+
+    padding: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    box-shadow: var(--shadow-float);
+  }
+
+  .form {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .form__title {
+    font-size: var(--fs-h3);
+    letter-spacing: -0.015em;
+  }
+
+  .form__hint {
+    margin-top: 0.25rem;
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+  }
+
+  .form__row {
+    display: grid;
+    gap: 1.25rem;
+
+    @include mq(sm) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ---------- Campos ---------- */
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+
+    > label,
+    legend {
+      padding: 0;
+      font-size: var(--fs-sm);
+      font-weight: 700;
+    }
+
+    legend {
+      margin-bottom: 0.4rem;
+    }
+  }
+
+  .field__optional {
+    color: var(--c-muted);
+    font-weight: 500;
+  }
+
+  input:not([type='radio'], [type='checkbox']),
+  textarea {
+    width: 100%;
+    min-height: 3.125rem;
+    padding: 0.75rem 0.9rem;
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: 0.75rem;
+    background: #fff;
+    font-size: 1rem; // 16px: evita el zoom automático de iOS al enfocar
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+
+    &::placeholder {
+      color: #8a9a97;
+    }
+
+    &:hover {
+      border-color: var(--c-muted);
+    }
+
+    &:focus {
+      border-color: var(--c-ink);
+      outline: none;
+      box-shadow: 0 0 0 4px rgb(255 210 63 / 0.55);
+    }
+
+    &[aria-invalid='true'] {
+      border-color: var(--c-coral-text);
+      background: #fffaf7;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    line-height: 1.5;
+  }
+
+  .field__error {
+    color: var(--c-coral-text);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+
+    &:empty {
+      display: none;
+    }
+
+    &::before {
+      content: '⚠ ';
+    }
+  }
+
+  /* ---------- Tipo de cliente: radios con aspecto de tarjeta ---------- */
+  .choices {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .choice {
+    position: relative;
+    display: grid;
+
+    input {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  .choice__box {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 3.125rem;
+    padding: 0.6rem 0.8rem;
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: 0.75rem;
+    background: #fff;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    line-height: 1.2;
+    transition:
+      border-color 0.15s,
+      background-color 0.15s;
+
+    :global(svg) {
+      flex: none;
+      color: var(--c-muted);
+    }
+
+    input:hover + & {
+      border-color: var(--c-muted);
+    }
+
+    input:checked + & {
+      border-color: var(--c-ink);
+      background: var(--c-volt-soft);
+      box-shadow: inset 0 0 0 1px var(--c-ink);
+
+      :global(svg) {
+        color: var(--c-ink);
+      }
+    }
+
+    input:focus-visible + & {
+      outline: 3px solid var(--c-ink);
+      outline-offset: 2px;
+    }
+
+    [aria-invalid='true'] + & {
+      border-color: var(--c-coral-text);
+    }
+  }
+
+  /* ---------- Casilla de privacidad ---------- */
+  .field--check {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    column-gap: 0.75rem;
+
+    input {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin: 0.15rem 0 0;
+      accent-color: var(--c-ink);
+      cursor: pointer;
+    }
+
+    > label {
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .field__error {
+      grid-column: 2;
+    }
+  }
+
+  .form__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form__status:empty {
+    display: none;
+  }
+
+  .form__status {
+    margin-top: -0.25rem;
+    color: var(--c-coral-text);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .form__reassure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: -0.25rem;
+    color: var(--c-leaf);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .form__legal {
+    padding-top: 1rem;
+    border-top: 1px solid var(--c-paper-2);
+    color: var(--c-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* ---------- Estado de éxito ---------- */
+  .success {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    padding-block: 2rem;
+    text-align: center;
+
+    &:focus {
+      outline: none;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  .success__icon {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    background: var(--c-leaf-soft);
+    color: var(--c-leaf);
+  }
+
+  .success__title {
+    font-size: var(--fs-h2);
+  }
+
+  .success__text {
+    max-width: 34ch;
+    color: var(--c-muted);
+    font-size: var(--fs-lg);
+  }
+
+  .success__tip {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 40ch;
+    margin-top: 0.75rem;
+    padding: 1rem 1.125rem;
+    border-radius: var(--radius);
+    background: var(--c-volt-soft);
+    font-size: var(--fs-sm);
+    text-align: left;
+
+    :global(svg) {
+      flex: none;
+    }
+  }
+
+  .success__reset {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border: 0;
+    background: none;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  @include motion {
+    .success:not([hidden]) {
+      animation: rise 0.6s var(--ease-out) both;
+    }
+  }
+</style>

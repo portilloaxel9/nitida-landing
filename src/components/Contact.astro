@@ -1,0 +1,190 @@
+---
+import Clock from '@lucide/astro/icons/clock';
+import Mail from '@lucide/astro/icons/mail';
+import Phone from '@lucide/astro/icons/phone';
+import LeadForm from './LeadForm.astro';
+import { site } from '../data/site';
+
+const nextSteps = [
+  'Te llamamos y resolvemos tus dudas.',
+  'Nos envías una factura reciente.',
+  'Recibes tu propuesta de ahorro, sin compromiso.',
+];
+---
+
+<section class="contact section" id="contacto" aria-labelledby="contact-title">
+  <div class="container">
+    <div class="contact__panel on-dark">
+      <div class="contact__copy">
+        <p class="kicker">Consulta gratuita</p>
+        <h2 class="section-title" id="contact-title">
+          Descubre cuánto puedes <span class="contact__accent">ahorrar</span>.
+        </h2>
+        <p class="lead">
+          Déjanos tus datos y una persona de nuestro equipo te llamará en menos de 24 horas
+          laborables para empezar tu revisión.
+        </p>
+
+        <h3 class="contact__subtitle">Qué pasa después</h3>
+        <ol class="contact__next" role="list">
+          {nextSteps.map((text, i) => (
+            <li>
+              <span class="contact__num">{i + 1}</span>
+              {text}
+            </li>
+          ))}
+        </ol>
+
+        <div class="contact__alt">
+          <p>¿Prefieres hablar ya?</p>
+          <a href={site.phoneHref}>
+            <Phone size={18} />
+            {site.phone}
+          </a>
+          <a href={`mailto:${site.email}`}>
+            <Mail size={18} />
+            {site.email}
+          </a>
+          <span>
+            <Clock size={18} />
+            {site.schedule}
+          </span>
+        </div>
+      </div>
+
+      <LeadForm />
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/mixins' as *;
+
+  .contact {
+    @include mq-down(sm) {
+      padding-bottom: 0;
+    }
+  }
+
+  .contact__panel {
+    position: relative;
+    display: grid;
+    gap: 2.5rem;
+    overflow: clip;
+    padding: clamp(1.5rem, 0.5rem + 4vw, 4rem);
+    border-radius: clamp(1.25rem, 1rem + 1vw, 2rem);
+
+    /* En móvil el panel ocupa todo el ancho y enlaza con el pie */
+    @include mq-down(sm) {
+      margin-inline: calc(var(--gutter) * -1);
+      border-radius: 0;
+      padding-inline: var(--gutter);
+      padding-block: 3.5rem;
+    }
+
+    @include mq(lg) {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    /* Destello de marca detrás del texto */
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -12rem;
+      left: -10rem;
+      width: 30rem;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgb(255 210 63 / 0.16), transparent);
+      pointer-events: none;
+    }
+  }
+
+  .contact__copy {
+    position: relative;
+
+    @include mq(lg) {
+      padding-top: 1rem;
+    }
+  }
+
+  .contact__accent {
+    color: var(--c-volt);
+  }
+
+  .contact__subtitle {
+    margin-top: 2.25rem;
+    color: var(--c-on-dark-muted);
+    font-family: var(--f-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .contact__next {
+    display: grid;
+    gap: 0.875rem;
+    margin-top: 1rem;
+
+    li {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+    }
+  }
+
+  .contact__num {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1.5px solid var(--c-volt);
+    border-radius: 50%;
+    color: var(--c-volt);
+    font-family: var(--f-mono);
+    font-size: 0.875rem;
+  }
+
+  .contact__alt {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgb(246 242 233 / 0.14);
+    font-size: var(--fs-sm);
+
+    p {
+      flex-basis: 100%;
+      color: var(--c-on-dark-muted);
+    }
+
+    a,
+    span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    a {
+      font-weight: 700;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    span {
+      color: var(--c-on-dark-muted);
+    }
+
+    :global(svg) {
+      color: var(--c-volt);
+    }
+  }
+</style>
