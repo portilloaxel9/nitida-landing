@@ -35,13 +35,16 @@ pantalla) y JetBrains Mono (cifras de factura y etiquetas técnicas, refuerza el
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321
-npm run build      # genera /dist (HTML estático)
-npm run preview    # sirve /dist en local
-npm run check      # tipos + diagnósticos de Astro
+npm run dev           # http://localhost:4321
+npm run build         # genera /dist (HTML estático)
+npm run preview       # sirve /dist en local
+npm run check         # tipos y diagnósticos de Astro
+npm run format        # formatea con Prettier
+npm run format:check  # comprueba el formato sin escribir
 ```
 
-Requiere Node 22.12 o superior.
+Requiere Node 22.12 o superior (ver `.nvmrc`). El proyecto trae `.editorconfig`, `.gitattributes`
+y configuración de Prettier para que el formato sea el mismo en cualquier equipo.
 
 ## 3. Estructura del proyecto
 
@@ -132,6 +135,11 @@ Definido en `src/styles/global.scss`:
 - Se respeta `prefers-reduced-motion`: sin animaciones para quien las desactiva.
 - Sin JavaScript la página se ve y se lee completa, y el formulario conserva la validación nativa
   del navegador.
+
+**Comprobado, no supuesto:** auditoría con axe-core (WCAG 2.1 AA + buenas prácticas) en la landing y
+en la página legal, a 1440 px y a 390 px → **0 incidencias**; `npm run check` sin errores; recorrido
+del formulario (envío vacío, teléfono inválido y envío correcto) y del acordeón en un navegador real;
+revisión visual a 390, 834 y 1440 px, con y sin JavaScript.
 
 ## 7. Rendimiento
 
