@@ -1,0 +1,182 @@
+---
+import Clock from '@lucide/astro/icons/clock';
+import Button from './ui/Button.astro';
+import { steps } from '../data/content';
+---
+
+<section class="steps section" id="como-funciona" aria-labelledby="steps-title">
+  <div class="container">
+    <div class="section-head section-head--center">
+      <p class="kicker">Cómo funciona</p>
+      <h2 class="section-title" id="steps-title">
+        Tres pasos. El trabajo lo hacemos nosotros.
+      </h2>
+    </div>
+
+    <ol class="steps__list" role="list">
+      {steps.map(({ icon: Icon, title, text, time }, i) => (
+        <li class="step" data-reveal style={`--reveal-i: ${i}`}>
+          <div class="step__marker">
+            <span class="step__num">{String(i + 1).padStart(2, '0')}</span>
+          </div>
+          <div class="step__card">
+            <span class="step__icon">
+              <Icon size={24} />
+            </span>
+            <h3 class="step__title">{title}</h3>
+            <p class="step__text">{text}</p>
+            <p class="step__time">
+              <Clock size={15} stroke-width={2.5} />
+              {time}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ol>
+
+    <div class="steps__cta">
+      <Button href="#contacto" size="lg" variant="dark" arrow>
+        Empezar mi revisión gratuita
+      </Button>
+      <p>Solo necesitas una factura reciente.</p>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '../styles/mixins' as *;
+
+  .steps {
+    background: var(--c-paper-2);
+  }
+
+  .steps__list {
+    position: relative;
+    display: grid;
+    gap: 1.25rem;
+
+    @include mq(lg) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+
+    @include mq(lg) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    /* Línea que une los pasos: vertical en móvil, horizontal en escritorio */
+    &:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      top: 3.5rem;
+      bottom: -1.25rem;
+      left: 1.6875rem;
+      border-left: 2px dashed var(--c-line-strong);
+
+      @include mq(lg) {
+        top: 1.6875rem;
+        right: -1.5rem;
+        bottom: auto;
+        left: 3.375rem;
+        border-top: 2px dashed var(--c-line-strong);
+        border-left: 0;
+      }
+    }
+  }
+
+  .step__marker {
+    position: relative;
+  }
+
+  .step__num {
+    display: grid;
+    place-items: center;
+    width: 3.375rem;
+    height: 3.375rem;
+    border-radius: 50%;
+    background: var(--c-ink);
+    color: var(--c-volt);
+    font-family: var(--f-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 0 0 6px var(--c-paper-2);
+  }
+
+  .step__card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.75rem 1.5rem 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--c-surface);
+    box-shadow:
+      inset 0 0 0 1px var(--c-line),
+      var(--shadow-card);
+  }
+
+  .step__icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1.25rem;
+    border-radius: var(--radius);
+    background: var(--c-volt-soft);
+  }
+
+  .step__title {
+    font-size: var(--fs-h3);
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  .step__text {
+    margin-top: 0.625rem;
+    margin-bottom: 1.25rem;
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+  }
+
+  /* margin-top: auto alinea los chips al pie aunque los textos midan distinto */
+  .step__time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: var(--c-leaf-soft);
+    color: var(--c-leaf);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+  }
+
+  .steps__cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.875rem;
+    margin-top: clamp(2.5rem, 2rem + 2vw, 3.5rem);
+    text-align: center;
+
+    p {
+      color: var(--c-muted);
+      font-size: var(--fs-sm);
+    }
+
+    @include mq-down(sm) {
+      > :global(.btn) {
+        width: 100%;
+      }
+    }
+  }
+</style>
